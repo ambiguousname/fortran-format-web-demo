@@ -23,7 +23,7 @@ The `FORMAT` statement is actually a bunch of disguised calls to `libFortranRunt
 
 Copy the binaries to the `binaries/libFortranRuntime` folder of the git project.
 
-### Part Three: Building the Program
+## Part Three: Building the Program
 
 ```
 emcmake cmake -B build
