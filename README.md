@@ -12,6 +12,8 @@ Major differences between that tutorial and this one are that I'm using [LLVM 20
 3. Configure and build with CMAKE. Make sure `-DDLLVM_TARGETS_TO_BUILD="WebAssembly"` is set. The only projects you need to enable are `-DLLVM_ENABLE_PROJECTS="clang;flang;mlir"`. `-DCMAKE_BUILD_TYPE=MinSizeRel` is recommended.
 4. Build `flang`.
 
+Copy the binaries to the `binaries/flang` folder of the git project.
+
 ## Part Two: Build libFortranRuntime for WebAssembly
 
 The `FORMAT` statement is actually a bunch of disguised calls to `libFortranRuntime`, so we need to compile these calls to WebAssembly:
@@ -19,8 +21,11 @@ The `FORMAT` statement is actually a bunch of disguised calls to `libFortranRunt
 1. Install and activate the [emscripten SDK](https://emscripten.org/docs/getting_started).
 2. Build `libFortranRuntime` with `emcmake`: `emcmake cmake -S flang/runtime`.
 
+Copy the binaries to the `binaries/libFortranRuntime` folder of the git project.
+
 ### Part Three: Building the Program
 
-`flang --target=wasm32 -c program.f90 -o program.wasm`
-
-`emcc -c program.wasm libFortranRuntime.a -o program.js`
+```
+emcmake cmake -B build
+emcmake cmake --build build
+```
