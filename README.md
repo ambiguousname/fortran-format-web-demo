@@ -19,7 +19,7 @@ Copy the binaries to the `binaries/flang` folder of the git project.
 The `FORMAT` statement is actually a bunch of disguised calls to `libFortranRuntime`, so we need to compile these calls to WebAssembly:
 
 1. Install and activate the [emscripten SDK](https://emscripten.org/docs/getting_started).
-2. Build `libFortranRuntime` with `emcmake`: `emcmake cmake -S flang/runtime`.
+2. Prepare `libFortranRuntime` with `emcmake`: `emcmake cmake -S flang/runtime`, then build.
 
 Copy the binaries to the `binaries/libFortranRuntime` folder of the git project.
 
