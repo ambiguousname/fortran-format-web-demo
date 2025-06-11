@@ -27,5 +27,5 @@ Copy the binaries to the `binaries/libFortranRuntime` folder of the git project.
 
 ```
 emcmake cmake -B build
-emcmake cmake --build build
+emcmake cmake --build build --target=fortran_wasm
 ```
