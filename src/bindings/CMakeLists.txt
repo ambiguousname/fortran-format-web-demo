@@ -1,1 +1,0 @@
-add_library(format_bindings bindings.c)
