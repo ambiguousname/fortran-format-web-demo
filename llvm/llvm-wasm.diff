@@ -1,5 +1,5 @@
 diff --git a/flang/include/flang/Optimizer/Builder/Runtime/RTBuilder.h b/flang/include/flang/Optimizer/Builder/Runtime/RTBuilder.h
-index eaa1de76154d..e3be30e6b4ec 100644
+index eaa1de76154d..cf0859edb1dc 100644
 --- a/flang/include/flang/Optimizer/Builder/Runtime/RTBuilder.h
 +++ b/flang/include/flang/Optimizer/Builder/Runtime/RTBuilder.h
 @@ -259,7 +259,7 @@ constexpr TypeBuilderFunc getModel<void **>() {
@@ -11,12 +11,46 @@ index eaa1de76154d..e3be30e6b4ec 100644
    };
  }
  template <>
-@@ -308,7 +308,7 @@ constexpr TypeBuilderFunc getModel<const long long *>() {
+@@ -280,7 +280,7 @@ constexpr TypeBuilderFunc getModel<const long *>() {
+ template <>
+ constexpr TypeBuilderFunc getModel<long long>() {
+   return [](mlir::MLIRContext *context) -> mlir::Type {
+-    return mlir::IntegerType::get(context, 8 * sizeof(long long));
++    return mlir::IntegerType::get(context, 8 * 4);
+   };
+ }
+ template <>
+@@ -308,13 +308,13 @@ constexpr TypeBuilderFunc getModel<const long long *>() {
  template <>
  constexpr TypeBuilderFunc getModel<unsigned long>() {
    return [](mlir::MLIRContext *context) -> mlir::Type {
 -    return mlir::IntegerType::get(context, 8 * sizeof(unsigned long));
 +    return mlir::IntegerType::get(context, 8 * 4);
+   };
+ }
+ template <>
+ constexpr TypeBuilderFunc getModel<unsigned long long>() {
+   return [](mlir::MLIRContext *context) -> mlir::Type {
+-    return mlir::IntegerType::get(context, 8 * sizeof(unsigned long long));
++    return mlir::IntegerType::get(context, 8 * 4);
+   };
+ }
+ template <>
+@@ -441,7 +441,7 @@ template <>
+ constexpr TypeBuilderFunc getModel<unsigned long *>() {
+   return [](mlir::MLIRContext *context) -> mlir::Type {
+     return fir::ReferenceType::get(
+-        mlir::IntegerType::get(context, 8 * sizeof(unsigned long)));
++        mlir::IntegerType::get(context, 8 * 4));
+   };
+ }
+ template <>
+@@ -452,7 +452,7 @@ template <>
+ constexpr TypeBuilderFunc getModel<unsigned long long *>() {
+   return [](mlir::MLIRContext *context) -> mlir::Type {
+     return fir::ReferenceType::get(
+-        mlir::IntegerType::get(context, 8 * sizeof(unsigned long long)));
++        mlir::IntegerType::get(context, 8 * 4));
    };
  }
  template <>
