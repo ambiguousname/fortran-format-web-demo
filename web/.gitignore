@@ -1,2 +1,3 @@
 emcc
 node_modules
+dist/out.wasm
