@@ -4,6 +4,7 @@ Pre-compiled binaries are included for convenience's sake. If you want to re-cre
 Major differences between that tutorial and this one are that I'm using [LLVM 20.x](https://github.com/llvm/llvm-project/tree/release/20.x), so some things will be accordingly changed.
 
 # Compiling
+Feel free to skip to Part Four if you have no intention of changing the binary `.wasm` code.
 
 ## Part One: Build Flang for WebAssembly
 
@@ -28,4 +29,10 @@ Copy the binaries to the `binaries/libFortranRuntime` folder of the git project.
 ```
 emcmake cmake -B build
 emcmake cmake --build build --target=fortran_wasm
+```
+
+## Part Four: Building Web Demo
+```
+npm -C web run build
+npm -C web run start
 ```
