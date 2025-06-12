@@ -8,4 +8,4 @@ enable_language(Fortran)
 
 set(CMAKE_Fortran_FLAGS "--target=wasm32")
 
-add_library(hello hello.f90)
+add_library(formatting formatting.f90)
