@@ -1,7 +1,10 @@
 find_path(FLANG NAMES flang flang.exe HINTS ${CMAKE_SOURCE_DIR}/binaries/flang/bin)
 
-set(CMAKE_Fortran_COMPILER ${FLANG})
+if (NOT ${CMAKE_Fortran_COMPILER})
+	set(CMAKE_Fortran_COMPILER ${FLANG})
+endif()
 set(CMAKE_Fortran_COMPILER_WORKS 1)
+set(CMAKE_Fortran_PREPROCESS_SOURCE "${CMAKE_Fortran_COMPILER} <DEFINES> <INCLUDES> <FLAGS> -E <SOURCE> > <PREPROCESSED_SOURCE>")
 
 project(fortran_lib LANGUAGES Fortran)
 enable_language(Fortran)

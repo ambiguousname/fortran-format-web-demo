@@ -26,18 +26,18 @@ Copy the binaries to the `binaries/libFortranRuntime` folder of the git project.
 
 ## Part Three: Building the Program
 
-```
+```bash
 emcmake cmake -B build
-emcmake cmake --build build --target=fortran_wasm
+cmake --build build --target=fortran_wasm
 ```
 
 ### Possible Errors
-If `flang` cannot be run correctly, you can set `-DFLANG="./binaries/flang/bin/flang"` when running the above `-B build` command.
-
-It's recommended to use `-G Visual Studio 17 2022` for windows builds, as `Ninja` causes some errors.
+#### Missing variable is: CMAKE_Fortran_PREPROCESS_SOURCE
+I believe this is something specific to Ninja, so you can just re-run `emcmake cmake -B build` and it should be fixed.
 
 ## Part Four: Building Web Demo
-```
+```bash
+npm -C web ci
 npm -C web run build
 npm -C web run start
 ```
