@@ -31,6 +31,11 @@ emcmake cmake -B build
 emcmake cmake --build build --target=fortran_wasm
 ```
 
+### Possible Errors
+If `flang` cannot be run correctly, you can set `-DFLANG="./binaries/flang/bin/flang"` when running the above `-B build` command.
+
+It's recommended to use `-G Visual Studio 17 2022` for windows builds, as `Ninja` causes some errors.
+
 ## Part Four: Building Web Demo
 ```
 npm -C web run build
