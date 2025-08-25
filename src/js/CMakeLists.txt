@@ -10,7 +10,7 @@ add_custom_command(
 	COMMAND 
 		emcc ${CMAKE_CURRENT_SOURCE_DIR}/bindings.c $<TARGET_OBJECTS:formatting> $<TARGET_FILE:fortranRuntimeLib> -sEXPORTED_RUNTIME_METHODS=ccall -sMODULARIZE -sENVIRONMENT=web -o out.js
 	DEPENDS
-		formatting
+		$<TARGET_OBJECTS:formatting>
 		bindings.c
 		$<TARGET_FILE:fortranRuntimeLib>
 		)
