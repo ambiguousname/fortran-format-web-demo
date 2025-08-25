@@ -1,5 +1,5 @@
 var Module = require("Formatter/out");
 
 Module().then((m) => {
-	m.ccall("test", "number", ["number"], [0]);
+	console.log(m.ccall("write_fmt", "string", ["string", "number"], ["test", 4]));
 });
