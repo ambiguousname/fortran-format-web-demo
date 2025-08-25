@@ -4,7 +4,8 @@
 #include <emscripten.h>
 
 extern int32_t test_(int32_t* a);
-extern void write_fmt_(char*, int);
+// For the C ABI, Fortran CHARACTER(len=*) are positioned normally as char*, but then their sizes are appended to the end.
+extern void write_fmt_(char*, char*, int, int);
 
 EMSCRIPTEN_KEEPALIVE
 int32_t test(int32_t a) {
@@ -12,7 +13,7 @@ int32_t test(int32_t a) {
 }
 
 EMSCRIPTEN_KEEPALIVE
-char* write_fmt(char* out, size_t len) {
-	write_fmt_(out, len);
+char* write_fmt(char* fmt_stmt, size_t fmt_len, char* out, size_t len) {
+	write_fmt_(fmt_stmt, out, fmt_len, len);
 	return out;
 }
