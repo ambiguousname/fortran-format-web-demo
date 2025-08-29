@@ -8,9 +8,9 @@ add_custom_command(
 		out.wasm
 		out.js
 	COMMAND 
-		emcc ${CMAKE_CURRENT_SOURCE_DIR}/bindings.c $<TARGET_OBJECTS:formatting> $<TARGET_FILE:fortranRuntimeLib> -sEXPORTED_RUNTIME_METHODS=ccall -sMODULARIZE -sENVIRONMENT=web -o out.js
+		emcc ${CMAKE_CURRENT_SOURCE_DIR}/bindings.cpp $<TARGET_OBJECTS:formatting> $<TARGET_FILE:fortranRuntimeLib> -sEXPORTED_RUNTIME_METHODS=ccall -sMODULARIZE -sENVIRONMENT=web -I ${FORTRAN_RUNTIME_LIB_HEADERS} -o out.js
 	DEPENDS
 		$<TARGET_OBJECTS:formatting>
-		bindings.c
+		bindings.cpp
 		$<TARGET_FILE:fortranRuntimeLib>
 		)
