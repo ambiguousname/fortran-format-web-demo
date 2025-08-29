@@ -1,2 +1,1 @@
-add_subdirectory(formatting)
-add_subdirectory(js)
+add_subdirectory(format_bindings)
