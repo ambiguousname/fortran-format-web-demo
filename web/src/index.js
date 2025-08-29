@@ -7,8 +7,10 @@ Module({
 	}
 }).then((m) => {
 	try { 
-		console.log(m.ccall("test", "", [], []));
+		let io = m.ccall("BeginExternalFormattedOutput", "number", ["string", "number"], ["('Hello')", 9]);
+		m.ccall("EndIoStatement", "", ["number"], [io]);
+		// m.ccall("_FortranAioOutputAscii", "number", ["string", "number"], ["('Hello')", 9]);
 	} catch (e) {
-		console.log("A", e);
+		console.log(e);
 	}
 });

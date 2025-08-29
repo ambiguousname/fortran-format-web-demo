@@ -8,10 +8,16 @@ using namespace Fortran::runtime::io;
 #include <emscripten.h>
 
 EMSCRIPTEN_KEEPALIVE
-extern "C" void test() {
-	Cookie io = _FortranAioBeginExternalFormattedOutput("(A I2)", 6);
-	_FortranAioOutputAscii(io, "Hello World!", 12);
-	
-	_FortranAioOutputInteger64(io, 20);
+extern "C" Cookie BeginExternalFormattedOutput(const char* fmt_string, std::size_t fmt_len) {
+	return _FortranAioBeginExternalFormattedOutput(fmt_string, fmt_len);
+}
+
+EMSCRIPTEN_KEEPALIVE
+extern "C" void EndIoStatement(Cookie io) {
 	_FortranAioEndIoStatement(io);
+}
+
+EMSCRIPTEN_KEEPALIVE
+extern "C" bool OutputAscii(Cookie io, const char* string, std::size_t len) {
+	return _FortranAioOutputAscii(io, string, len);
 }
