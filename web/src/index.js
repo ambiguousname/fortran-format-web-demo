@@ -6,9 +6,14 @@ Module({
 		console.error(e);
 	}
 }).then((m) => {
-	try { 
-		let io = m.ccall("BeginExternalFormattedOutput", "number", ["string", "number"], ["('Hello')", 9]);
-		m.ccall("EndIoStatement", "", ["number"], [io]);
+	class Formatter {
+		beginExternalFormattedOutput = m.cwrap("BeginExternalFormattedOutput", "number", ["string", "number"]);
+		endIo = m.cwrap("EndIoStatement", "", ["number"]);
+	}
+	try {
+		let f = new Formatter();
+		let io = f.beginExternalFormattedOutput("('Hello')", 9);
+		f.endIo(io);
 		// m.ccall("_FortranAioOutputAscii", "number", ["string", "number"], ["('Hello')", 9]);
 	} catch (e) {
 		console.log(e);
