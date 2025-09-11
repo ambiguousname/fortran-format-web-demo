@@ -1,15 +1,21 @@
 var Module = require("Formatter/out");
 require("bootstrap");
 
+function printErr(e) {
+	let output = document.getElementById("output-text");
+	output.innerText += e + "\n";
+	output.classList.add("code-error");
+}
+
 Module({
-	printErr: (e) => {
-		// TODO: Print to console
-		console.error(e);
-	}
+	printErr: printErr
 }).then((m) => {
-	try { 
+	let output = document.getElementById("output-text");
+	output.classList.remove("code-error");
+	output.innerText = "_";
+	try {
 		console.log(m.ccall("test", "", [], []));
 	} catch (e) {
-		console.log("A", e);
+		printErr(e);
 	}
 });
