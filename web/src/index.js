@@ -7,13 +7,30 @@ Module({
 	}
 }).then((m) => {
 	class Formatter {
-		beginExternalFormattedOutput = m.cwrap("BeginExternalFormattedOutput", "number", ["string", "number"]);
-		endIo = m.cwrap("EndIoStatement", "", ["number"]);
+		static beginExternalFormattedOutput = m.cwrap("BeginExternalFormattedOutput", "number", ["string", "number"]);
+		static outputAscii = m.cwrap("OutputAscii", "number", ["number", "string", "number"])
+		static endIo = m.cwrap("EndIoStatement", "", ["number"]);
+	}
+
+	class FormattedOutput {
+		#io;
+		constructor(formatString) {
+			this.#io = Formatter.beginExternalFormattedOutput(formatString, formatString.length);
+		}
+
+		addAscii(string) {
+			Formatter.outputAscii(this.#io, string, string.length);
+		}
+
+		print() {
+			Formatter.endIo(this.#io);
+		}
 	}
 	try {
-		let f = new Formatter();
-		let io = f.beginExternalFormattedOutput("('Hello')", 9);
-		f.endIo(io);
+		let f = new FormattedOutput("(A I2)");
+		// f.addAscii("Test");
+		// f.outputAscii(io, );
+		f.print();
 		// m.ccall("_FortranAioOutputAscii", "number", ["string", "number"], ["('Hello')", 9]);
 	} catch (e) {
 		console.log(e);
