@@ -1,11 +1,13 @@
-#ifdef _WIN32
+#ifndef EMSCRIPTEN
 #include <flang/Runtime/main.h>
 #include <flang/Runtime/io-api.h>
 using namespace Fortran::runtime::io;
+
+#define EMSCRIPTEN_KEEPALIVE
 #else
 #include "bindings.hpp"
-#endif
 #include <emscripten.h>
+#endif
 
 EMSCRIPTEN_KEEPALIVE
 extern "C" void test() {
