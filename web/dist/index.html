@@ -7,18 +7,31 @@
 		<meta charset="utf-8" />
 	</head>
 	<body>
-		<main role="main">
-			<div class="d-grid gap-2">
-				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<code class="input-group-text">FORMAT(</code>
+		<main role="main" class="my-3">
+			<div class="container">
+				<div class="row">
+					<div class="col d-grid gap-2">
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<code class="input-group-text">FORMAT(</code>
+							</div>
+							<input type="text" class="form-control" value="A"/>
+							<div class="input-group-append">
+								<code class="input-group-text">)</code>
+							</div>
+						</div>
+						<button type="button" class="btn btn-primary">Run <i class="bi bi-chevron-double-right"></i></button>
 					</div>
-					<input type="text" class="form-control"/>
-					<div class="input-group-append">
-						<code class="input-group-text">)</code>
+					<div class="col d-grid gap-2">
+						<button type="button" class="btn btn-secondary"> <i class="bi bi-plus-lg"></i> Add variable</button>
 					</div>
 				</div>
-				<button type="button" class="btn btn-primary">Run</button>
+				<div class="row border rounded-3 bg-light my-2 py-1">
+					<h1>Output</h1>
+					<code class="bg-dark">
+						Sample output
+					</code>
+				</div>
 			</div>
 		</main>
 	</body>
