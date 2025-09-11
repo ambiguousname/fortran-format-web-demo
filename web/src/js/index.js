@@ -1,4 +1,5 @@
 var Module = require("Formatter/out");
+require("bootstrap");
 
 Module({
 	printErr: (e) => {
