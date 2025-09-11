@@ -10,7 +10,7 @@ module.exports = {
   },
   resolve: {
 	alias: {
-		Formatter: path.resolve(__dirname, "../build/src/js")
+		Formatter: path.resolve(__dirname, "../build/src/format_bindings")
 	},
   fallback: {"path": require.resolve("path-browserify")}
   },
@@ -18,7 +18,7 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, "../build/src/js/out.wasm"),
+          from: path.resolve(__dirname, "../build/src/format_bindings/out.wasm"),
           to: "."
         }
       ]
