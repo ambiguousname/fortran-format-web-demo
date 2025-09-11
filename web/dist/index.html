@@ -2,13 +2,52 @@
 <html>
 	<head>
 		<title>Fortran FORMAT Demo</title>
+		<script src="style.js"></script>
 		<script src="main.js"></script>
 		<meta charset="utf-8" />
 	</head>
 	<body>
-		<code>
-			FORMAT(<input/>)
-		</code>
-		<button>Run</button>
+		<main role="main" class="my-3">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="input-group mb-3 code-group align-items-end">
+							<div class="input-group-prepend">
+								<code class="input-group-text">FORMAT(</code>
+							</div>
+							<input type="text" class="form-control code-input" value="A"/>
+							<div class="input-group-append">
+								<code class="input-group-text">)</code>
+							</div>
+						</div>
+						<button type="button" class="btn btn-primary w-100">Run <i class="bi bi-chevron-double-right"></i></button>
+					</div>
+					<div class="col d-grid gap-2">
+						<div class="container" id="variables">
+							<div class="row">
+								<div class="d-inline-flex">
+									<select class="form-select">
+										<option selected>Integer</option>
+										<option>Real</option>
+										<option>Complex</option>
+										<option>String</option>
+										<option>Logical</option>
+									</select>
+									<input type="number" class="form-control" value="0" step="1"/>
+									<button type="button" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
+								</div>
+							</div>
+						</div>
+						<button type="button" class="btn btn-secondary"> <i class="bi bi-plus-lg"></i> Add variable</button>
+					</div>
+				</div>
+				<div class="row border rounded-3 bg-light my-2 py-1">
+					<h1>Output</h1>
+					<code class="bg-dark" id="output-text">
+						_
+					</code>
+				</div>
+			</div>
+		</main>
 	</body>
 </html>

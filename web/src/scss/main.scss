@@ -1,0 +1,20 @@
+// Update the import directory to point to it‘s location within node_modules
+$bootstrap-icons-font-dir: "bootstrap-icons/font/fonts";
+
+// Import the Sass files as usual
+@import "bootstrap-icons/font/bootstrap-icons";
+
+@import "~bootstrap/scss/bootstrap";
+
+.code-group code {
+	color: var(--bs-code-color);
+}
+
+.code-input {
+	font-family: Consolas, monospace;
+	color: var(--bs-code-color);
+}
+
+.code-error {
+	color: $danger;
+}
