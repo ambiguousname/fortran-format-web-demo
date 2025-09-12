@@ -46,31 +46,33 @@ async function load() {
 		try {
 			// We create a scratch pad file each time, in case the current unit encounters an error and becomes unclosable
 			// (User can reload if it starts impacting memory):
-			let newUnit = Formatter.beginNewUnit();
-			Formatter.setScratch(newUnit);
-			let i = Formatter.getNewUnit(newUnit);
-			Formatter.endIo(newUnit);
+			// let newUnit = Formatter.beginNewUnit();
+			// Formatter.setScratch(newUnit);
+			// let i = Formatter.getNewUnit(newUnit);
+			// Formatter.endIo(newUnit);
 
-			let f = new FormattedOutput(`(${formatStmt.value})`, i);
+			let f = new FormattedOutput(`(${formatStmt.value})`, 6);
 			// TODO: Formatter string getters.
 			f.print();
 
-			let close = Formatter.beginClose(i);
-			Formatter.endIo(close);
+			// let close = Formatter.beginClose(i);
+			// Formatter.endIo(close);
 			
 			// let f = new FormattedOutput(`(${formatStmt.value})`);
 			// TODO: Need to save the above string somewhere, otherwise this throws it off:
 			// f.addAscii("Test");
 			// f.outputAscii(io, );
 			// m.ccall("_FortranAioOutputAscii", "number", ["string", "number"], ["('Hello')", 9]);
-		} catch(e) { 
+		} catch(e) {
 			printErr(e);
+			// Instead of worrying about reading a filesystem, just reload the whole module:
+			load();
 		}
 	}
 
 	document.getElementById("run").onclick = runFormatting;
 
-	runFormatting();
+	// runFormatting();
 }
 
 document.addEventListener("DOMContentLoaded", load);
