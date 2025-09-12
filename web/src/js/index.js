@@ -5,7 +5,15 @@ let runFirst = false;
 
 async function load() {
 	let output = document.getElementById("output-text");
-	let formatStmt = document.getElementById("format-statement");
+	let formatStmt = document.getElementById("format-stmt");
+
+	let stmtText = document.getElementById("stmt-text");
+	formatStmt.addEventListener("input", (i) => {
+		stmtText.textContent = `10 FORMAT(${formatStmt.value})`;
+		// Cheap hack to insert line breaks and avoid escaping sanitized strings:
+		stmtText.innerHTML += `<br> WRITE(*, 10) var_one`;
+	});
+
 	function printErr(e) {
 		output.innerText += e + "\n";
 		output.classList.add("code-error");

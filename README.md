@@ -39,5 +39,5 @@ I believe this is something specific to Ninja, so you can just re-run `emcmake c
 ```bash
 npm -C web ci
 npm -C web run build
-npm -C web run start
+npm -C web run start --mode development
 ```
