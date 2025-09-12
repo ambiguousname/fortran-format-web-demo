@@ -8,11 +8,10 @@ export const TYPES = {
 
 export class VariableInput extends HTMLElement {
 	#parent;
-	#name;
 	#type;
 
 	#variableInput;
-	constructor(parent, name, type) {
+	constructor(parent, type) {
 		super();
 		this.#parent = parent;
 		const shadow = this.attachShadow({
@@ -22,16 +21,11 @@ export class VariableInput extends HTMLElement {
 		shadow.appendChild(template.content.cloneNode(true));
 
 		shadow.getElementById("delete").addEventListener("click", this.delete.bind(this));
-		this.#name = name;
-
-		let variableName = shadow.getElementById("variable-name");
-		variableName.value = name;
-		variableName.addEventListener("input", () => {
-			this.#name = variableName.value;
-			this.#parent.updateDisplay()
-		});
 
 		this.#variableInput = shadow.getElementById("value");
+		this.#variableInput.addEventListener("input", () => {
+			this.#parent.updateDisplay();
+		});
 
 		this.#type = type;
 		switch(this.#type) {
@@ -48,12 +42,12 @@ export class VariableInput extends HTMLElement {
 		return this.#type;
 	}
 
-	get name() {
-		return this.#name;
-	}
-
 	get value() {
-		return this.#variableInput.value;
+		switch (this.#type) {
+			case TYPES.INTEGER:
+			default:
+				return this.#variableInput.value;
+		}
 	}
 
 	delete() {
@@ -63,7 +57,6 @@ export class VariableInput extends HTMLElement {
 customElements.define("variable-input", VariableInput);
 
 export class VariableHandler {
-	#variableNames = new Set();
 	#elem;
 	constructor(listElem) {
 		this.#elem = listElem;
@@ -72,32 +65,25 @@ export class VariableHandler {
 	updateDisplay;
 
 	createNew() {
-		let name = `var_${this.#variableNames.size}`;
-		if (this.#variableNames.has(name)) {
-			name = `var_${this.#variableNames.size + 1}`;
-		}
-
-		let v = new VariableInput(this, name, TYPES.INTEGER);
+		let v = new VariableInput(this, TYPES.INTEGER);
 		this.append(v);
 	}
 
 	append(v) {
-		this.#variableNames.add(v.name);
 		this.#elem.appendChild(v);
 	}
 
 	remove(v) {
-		this.#variableNames.delete(v.name);
 		this.#elem.removeChild(v);
 		this.updateDisplay();
 	}
 
 	displayVariableList() {
-		let string = "";
+		let list = [];
 		for (let v of this.#elem.children) {
-			string += v.name + " ";
+			list.push(v.value);
 		}
-		return string;
+		return list.join(", ");
 	}
 
 	children() {
