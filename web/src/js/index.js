@@ -9,6 +9,9 @@ let urlInfo = new URLSearchParams(window.location.search);
 let stmt = urlInfo.get("stmt");
 
 async function load() {
+	let licenseBody = document.getElementById("license-body");
+	licenseBody.innerText = await (await fetch("./LICENSE.txt")).text();
+	
 	let addVar = document.getElementById("add-variable");
 	let variables = new VariableHandler(document.getElementById("variables"));
 
@@ -101,7 +104,7 @@ async function load() {
 						break;
 				}
 			}
-			
+
 			f.print();
 
 			// let close = Formatter.beginClose(i);

@@ -18,3 +18,7 @@ $bootstrap-icons-font-dir: "bootstrap-icons/font/fonts";
 .code-error {
 	color: $danger;
 }
+
+.modal-body {
+	overflow-wrap: break-word;
+}
