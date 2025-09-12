@@ -10,13 +10,35 @@ using namespace Fortran::runtime::io;
 #endif
 
 EMSCRIPTEN_KEEPALIVE
-extern "C" Cookie BeginExternalFormattedOutput(const char* fmt_string, std::size_t fmt_len) {
-	return _FortranAioBeginExternalFormattedOutput(fmt_string, fmt_len);
+extern "C" Cookie BeginExternalFormattedOutput(const char* fmt_string, std::size_t fmt_len, int unit = 6) {
+	return _FortranAioBeginExternalFormattedOutput(fmt_string, fmt_len, nullptr, unit);
 }
 
 EMSCRIPTEN_KEEPALIVE
 extern "C" void EndIoStatement(Cookie io) {
 	_FortranAioEndIoStatement(io);
+}
+
+EMSCRIPTEN_KEEPALIVE
+extern "C" Cookie BeginOpenNewUnit() {
+	return _FortranAioBeginOpenNewUnit();
+}
+
+EMSCRIPTEN_KEEPALIVE
+extern "C" Cookie BeginClose(ExternalUnit unit) {
+	return _FortranAioBeginClose(unit);
+}
+
+EMSCRIPTEN_KEEPALIVE
+extern "C" ExternalUnit GetNewUnit(Cookie io) {
+	int out = -1;
+	_FortranAioGetNewUnit(io, out);
+	return out;
+}
+
+EMSCRIPTEN_KEEPALIVE
+extern "C" bool SetScratch(Cookie io) {
+	return _FortranAioSetStatus(io, "SCRATCH", 7);
 }
 
 EMSCRIPTEN_KEEPALIVE

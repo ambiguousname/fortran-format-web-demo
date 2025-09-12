@@ -13,14 +13,14 @@
 					<div class="col">
 						<div class="input-group mb-3 code-group align-items-end">
 							<div class="input-group-prepend">
-								<code class="input-group-text">FORMAT(</code>
+								<code class="input-group-text">10 FORMAT(</code>
 							</div>
-							<input type="text" class="form-control code-input" value="A"/>
+							<input type="text" class="form-control code-input" value="A" id="format-statement"/>
 							<div class="input-group-append">
 								<code class="input-group-text">)</code>
 							</div>
 						</div>
-						<button type="button" class="btn btn-primary w-100">Run <i class="bi bi-chevron-double-right"></i></button>
+						<button type="button" class="btn btn-primary w-100" id="run">Run <i class="bi bi-chevron-double-right"></i></button>
 					</div>
 					<div class="col d-grid gap-2">
 						<div class="container" id="variables">
@@ -44,7 +44,7 @@
 				</div>
 				<div class="row border rounded-3 bg-light my-2 py-1">
 					<h1>Statement</h1>
-					<code>PRINT "(A)", var_one</code>
+					<code> WRITE(*, 10) var_one</code>
 					<h1>Output</h1>
 					<code class="bg-dark" id="output-text">
 						_
