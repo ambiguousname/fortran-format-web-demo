@@ -52,7 +52,6 @@ async function load() {
 			// Formatter.endIo(newUnit);
 
 			let f = new FormattedOutput(`(${formatStmt.value})`, 6);
-			// TODO: Formatter string getters.
 			f.print();
 
 			// let close = Formatter.beginClose(i);
