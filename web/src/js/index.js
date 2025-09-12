@@ -1,6 +1,8 @@
 var Module = require("Formatter/out");
 require("bootstrap");
 
+let runFirst = false;
+
 async function load() {
 	let output = document.getElementById("output-text");
 	let formatStmt = document.getElementById("format-statement");
@@ -71,7 +73,10 @@ async function load() {
 
 	document.getElementById("run").onclick = runFormatting;
 
-	// runFormatting();
+	if (!runFirst) {
+		runFormatting();
+		runFirst = false;
+	}
 }
 
 document.addEventListener("DOMContentLoaded", load);
