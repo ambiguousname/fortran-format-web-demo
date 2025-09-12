@@ -7,8 +7,52 @@ let urlInfo = new URLSearchParams(window.location.search);
 let stmt = urlInfo.get("stmt");
 
 async function load() {
+	let licenseNav = document.getElementById("license-nav");
 	let licenseBody = document.getElementById("license-body");
-	licenseBody.innerText = await (await fetch("./LICENSE.txt")).text();
+
+	let licenses = ["Main", "Bootstrap", "Emscripten", "LLVM"];
+	let first = true;
+	for (let license of licenses) {
+		let text = (fetch(`./licenses/${license}.txt`).then((res) => {
+			return res.text()
+		}));
+		console.log(license);
+
+		let listItem = document.createElement("li");
+		listItem.classList.add("nav-item");
+		listItem.role = "presentation";
+
+		let button = document.createElement("button");
+		button.role = "tab";
+		button.classList.add("nav-link");
+		button.id = `${license}-tab`;
+		button.setAttribute("data-bs-toggle", "tab");
+		button.setAttribute("data-bs-target", `#${license}`);
+		button.type = "button";
+		button.setAttribute("aria-controls", license);
+		button.innerText = license;
+
+		listItem.appendChild(button);
+
+		let div = document.createElement("div");
+		div.classList.add("tab-pane", "fade");
+		div.id = license;
+		div.setAttribute("aria-labelledby", `${license}-tab`);
+
+		text.then((t) => {
+			div.innerText = t;
+		});
+
+		licenseNav.appendChild(listItem);
+		licenseBody.appendChild(div);
+
+		if (first) {
+			button.classList.add("active");
+			div.classList.add("show", "active");
+			first = false;
+		}
+	}
+	// licenseBody.innerText = 
 	
 	let addVar = document.getElementById("add-variable");
 	let variables = new VariableHandler(document.getElementById("variables"));

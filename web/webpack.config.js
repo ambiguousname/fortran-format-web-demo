@@ -49,6 +49,10 @@ module.exports = {
         {
           from: path.resolve(__dirname, "../build/src/format_bindings/out.wasm"),
           to: "."
+        },
+        {
+          from: path.resolve(__dirname, "../LICENSE"),
+          to: "./licenses/Main.txt"
         }
       ]
     }),
