@@ -1,5 +1,6 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: {
@@ -11,9 +12,8 @@ module.exports = {
     rules: [
       {
         test: /\.(scss)$/,
-        use: [{
-          loader: 'style-loader', // inject CSS to page
-        }, {
+        use: [MiniCssExtractPlugin.loader,
+        {
           loader: 'css-loader', // translates CSS into CommonJS modules
         }, {
           loader: 'postcss-loader', // Run post css actions
@@ -51,7 +51,10 @@ module.exports = {
           to: "."
         }
       ]
-    })
+    }),
+    new MiniCssExtractPlugin({
+      filename: "[name].css"
+    }),
   ],
   devServer: {
     static: {
