@@ -1,7 +1,7 @@
 var Module = require("Formatter/out");
 require("bootstrap");
 
-const { VariableHandler } = require("./variables.js");
+const { VariableHandler, TYPES } = require("./variables.js");
 
 let runFirst = false;
 
@@ -84,6 +84,17 @@ async function load() {
 
 			let f = new FormattedOutput(`(${formatStmt.value})`, 6);
 			f.print();
+
+			for (let v of variables.children()) {
+				switch(v.type) {
+					case TYPES.INTEGER:
+						f.addInteger(v.value);
+						break;
+					default:
+						alert("TODO");
+						break;
+				}
+			}
 
 			// let close = Formatter.beginClose(i);
 			// Formatter.endIo(close);

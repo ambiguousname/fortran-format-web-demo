@@ -1,7 +1,18 @@
+export const TYPES = {
+	INTEGER: 0,
+	REAL: 1,
+	COMPLEX: 2,
+	STRING: 3,
+	LOGICAL: 4,	
+};
+
 export class VariableInput extends HTMLElement {
 	#parent;
 	#name;
-	constructor(parent, name) {
+	#type;
+
+	#variableInput;
+	constructor(parent, name, type) {
 		super();
 		this.#parent = parent;
 		const shadow = this.attachShadow({
@@ -19,10 +30,30 @@ export class VariableInput extends HTMLElement {
 			this.#name = variableName.value;
 			this.#parent.updateDisplay()
 		});
+
+		this.#variableInput = shadow.getElementById("value");
+
+		this.#type = type;
+		switch(this.#type) {
+			// Do nothing, this is selected by default:
+			case TYPES.INTEGER:
+				break;
+			default:
+				alert("TODO");
+				break;
+		}
+	}
+
+	get type() {
+		return this.#type;
 	}
 
 	get name() {
 		return this.#name;
+	}
+
+	get value() {
+		return this.#variableInput.value;
 	}
 
 	delete() {
@@ -46,7 +77,7 @@ export class VariableHandler {
 			name = `var_${this.#variableNames.size + 1}`;
 		}
 
-		let v = new VariableInput(this, name);
+		let v = new VariableInput(this, name, TYPES.INTEGER);
 		this.append(v);
 	}
 
@@ -67,5 +98,9 @@ export class VariableHandler {
 			string += v.name + " ";
 		}
 		return string;
+	}
+
+	children() {
+		return this.#elem.children;
 	}
 }
