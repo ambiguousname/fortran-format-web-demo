@@ -3,16 +3,26 @@ require("bootstrap");
 
 let runFirst = false;
 
+let urlInfo = new URLSearchParams(window.location.search);
+let stmt = urlInfo.get("stmt");
+
 async function load() {
 	let output = document.getElementById("output-text");
 	let formatStmt = document.getElementById("format-stmt");
 
 	let stmtText = document.getElementById("stmt-text");
-	formatStmt.addEventListener("input", (i) => {
+	function updateFormatStmt() {
 		stmtText.textContent = `10 FORMAT(${formatStmt.value})`;
 		// Cheap hack to insert line breaks and avoid escaping sanitized strings:
 		stmtText.innerHTML += `<br> WRITE(*, 10) var_one`;
-	});
+	}
+
+	formatStmt.addEventListener("input", updateFormatStmt);
+
+	if (stmt !== null) {
+		formatStmt.value = stmt;
+		updateFormatStmt();
+	}
 
 	function printErr(e) {
 		output.innerText += e + "\n";
