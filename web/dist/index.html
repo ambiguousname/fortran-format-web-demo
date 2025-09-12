@@ -34,7 +34,7 @@
 					<code id="stmt-text">
 					10 FORMAT(A)
 					<br>
-					WRITE(*, 10) var_one</code>
+					WRITE(*, 10)</code>
 					<h1>Output</h1>
 					<code class="bg-dark" id="output-text">
 						_
@@ -46,7 +46,7 @@
 			<link rel="stylesheet" href="style.css"/>
 			<div class="row">
 				<div class="d-inline-flex">
-					<input type="text" class="form-control" value="var_one" placeholder="Variable Name"/>
+					<input type="text" class="form-control" value="var_one" placeholder="Variable Name" id="variable-name"/>
 					<select class="form-select">
 						<option selected>Integer</option>
 						<option>Real</option>
@@ -55,7 +55,7 @@
 						<option>Logical</option>
 					</select>
 					<input type="number" class="form-control" value="0" step="1"/>
-					<button type="button" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
+					<button type="button" class="btn btn-outline-danger" id="delete"><i class="bi bi-trash"></i></button>
 				</div>
 			</div>
 		</template>
