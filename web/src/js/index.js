@@ -3,8 +3,6 @@ require("bootstrap");
 
 const { VariableHandler, TYPES } = require("./variables.js");
 
-let runFirst = false;
-
 let urlInfo = new URLSearchParams(window.location.search);
 let stmt = urlInfo.get("stmt");
 
@@ -42,93 +40,99 @@ async function load() {
 		output.innerText += e + "\n";
 		output.classList.add("code-error");
 	}
-	
-	let m = await Module({
-		printErr: printErr,
-		print: (p) => {
-			output.innerText += p + "\n";
-		}
-	})
 
-	class Formatter {
-		static outputInteger64 = m.cwrap("OutputInteger64", "number", ["number", "number"]);
-		static outputAscii = m.cwrap("OutputAscii", "number", ["number", "string", "number"]);
-		static endIo = m.cwrap("EndIoStatement", "", ["number"]);
-		static beginNewUnit = m.cwrap("BeginOpenNewUnit", "number", [""]);
-		static beginClose = m.cwrap("BeginClose", "number", ["number"]);
-		static getNewUnit = m.cwrap("GetNewUnit", "number", ["number"]);
-		static setScratch = m.cwrap("SetScratch", "boolean", [""]);
-	}
+	let runFirst = false;
+	async function setupFormatter() {
+		let m = await Module({
+			printErr: printErr,
+			print: (p) => {
+				output.innerText += p + "\n";
+			}
+		})
 
-	class FormattedOutput {
-		#str;
-		#io;
-		constructor(formatString, unit) {
-			this.#str = m.stringToNewUTF8(formatString);
-			this.#io = m._BeginExternalFormattedOutput(this.#str, formatString.length, unit);
+		class Formatter {
+			static outputInteger64 = m.cwrap("OutputInteger64", "number", ["number", "number"]);
+			static outputAscii = m.cwrap("OutputAscii", "number", ["number", "string", "number"]);
+			static endIo = m.cwrap("EndIoStatement", "", ["number"]);
+			static beginNewUnit = m.cwrap("BeginOpenNewUnit", "number", [""]);
+			static beginClose = m.cwrap("BeginClose", "number", ["number"]);
+			static getNewUnit = m.cwrap("GetNewUnit", "number", ["number"]);
+			static setScratch = m.cwrap("SetScratch", "boolean", [""]);
 		}
 
-		addInteger(i) {
-			Formatter.outputInteger64(this.#io, i);
-		}
-
-		addAscii(string) {
-			Formatter.outputAscii(this.#io, string, string.length);
-		}
-
-		print() {
-			Formatter.endIo(this.#io);
-			m._free(this.#str);
-		}
-	}
-
-	async function runFormatting() {
-		output.innerText = "";
-		try {
-			// We create a scratch pad file each time, in case the current unit encounters an error and becomes unclosable
-			// (User can reload if it starts impacting memory):
-			// let newUnit = Formatter.beginNewUnit();
-			// Formatter.setScratch(newUnit);
-			// let i = Formatter.getNewUnit(newUnit);
-			// Formatter.endIo(newUnit);
-
-			let f = new FormattedOutput(`(${formatStmt.value})`, 6);
-			
-			for (let v of variables.children()) {
-				switch(v.type) {
-					case TYPES.INTEGER:
-						f.addInteger(parseInt(v.value));
-						break;
-					default:
-						alert("TODO");
-						break;
-				}
+		class FormattedOutput {
+			#str;
+			#io;
+			constructor(formatString, unit) {
+				this.#str = m.stringToNewUTF8(formatString);
+				this.#io = m._BeginExternalFormattedOutput(this.#str, formatString.length, unit);
 			}
 
-			f.print();
+			addInteger(i) {
+				Formatter.outputInteger64(this.#io, i);
+			}
 
-			// let close = Formatter.beginClose(i);
-			// Formatter.endIo(close);
-			
-			// let f = new FormattedOutput(`(${formatStmt.value})`);
-			// TODO: Need to save the above string somewhere, otherwise this throws it off:
-			// f.addAscii("Test");
-			// f.outputAscii(io, );
-			// m.ccall("_FortranAioOutputAscii", "number", ["string", "number"], ["('Hello')", 9]);
-		} catch(e) {
-			printErr(e);
-			// Instead of worrying about reading a filesystem, just reload the whole module:
-			load();
+			addAscii(string) {
+				Formatter.outputAscii(this.#io, string, string.length);
+			}
+
+			print() {
+				Formatter.endIo(this.#io);
+				m._free(this.#str);
+			}
+		}
+
+		async function runFormatting() {
+			output.innerText = "";
+			try {
+				// We create a scratch pad file each time, in case the current unit encounters an error and becomes unclosable
+				// (User can reload if it starts impacting memory):
+				// let newUnit = Formatter.beginNewUnit();
+				// Formatter.setScratch(newUnit);
+				// let i = Formatter.getNewUnit(newUnit);
+				// Formatter.endIo(newUnit);
+
+				let f = new FormattedOutput(`(${formatStmt.value})`, 6);
+				
+				for (let v of variables.children()) {
+					switch(v.type) {
+						case TYPES.INTEGER:
+							f.addInteger(parseInt(v.value));
+							break;
+						default:
+							alert("TODO");
+							break;
+					}
+				}
+
+				f.print();
+
+				// let close = Formatter.beginClose(i);
+				// Formatter.endIo(close);
+				
+				// let f = new FormattedOutput(`(${formatStmt.value})`);
+				// TODO: Need to save the above string somewhere, otherwise this throws it off:
+				// f.addAscii("Test");
+				// f.outputAscii(io, );
+				// m.ccall("_FortranAioOutputAscii", "number", ["string", "number"], ["('Hello')", 9]);
+			} catch(e) {
+				printErr(e);
+				// Instead of worrying about reading a filesystem, just reload the whole module:
+				setupFormatter();
+			}
+		}
+
+		document.getElementById("run").onclick = runFormatting;
+
+		if (!runFirst) {
+			runFormatting();
+			runFirst = true;
 		}
 	}
 
-	document.getElementById("run").onclick = runFormatting;
-
-	if (!runFirst) {
-		updateFormatStmt();
-		runFormatting();
-		runFirst = true;
-	}
+	// Handle URL decoding:
+	updateFormatStmt();
+	setupFormatter();
 }
 
 document.addEventListener("DOMContentLoaded", load);
