@@ -1,6 +1,8 @@
 var Module = require("Formatter/out");
 require("bootstrap");
 
+const { VariableInput } = require("./variables.js");
+
 let runFirst = false;
 
 let urlInfo = new URLSearchParams(window.location.search);
@@ -23,6 +25,13 @@ async function load() {
 		formatStmt.value = stmt;
 		updateFormatStmt();
 	}
+	
+
+	let addVar = document.getElementById("add-variable");
+	let variables = document.getElementById("variables");
+	addVar.addEventListener("click", () => {
+		variables.appendChild(new VariableInput());
+	});
 
 	function printErr(e) {
 		output.innerText += e + "\n";
