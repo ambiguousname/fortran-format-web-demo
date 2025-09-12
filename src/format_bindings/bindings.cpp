@@ -45,3 +45,8 @@ EMSCRIPTEN_KEEPALIVE
 extern "C" bool OutputAscii(Cookie io, const char* string, std::size_t len) {
 	return _FortranAioOutputAscii(io, string, len);
 }
+
+EMSCRIPTEN_KEEPALIVE
+extern "C" bool OutputInteger64(Cookie io, std::int64_t i) {
+	return _FortranAioOutputInteger64(io, i);
+}

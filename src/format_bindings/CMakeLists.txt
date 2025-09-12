@@ -8,7 +8,7 @@ add_custom_command(
 		out.wasm
 		out.js
 	COMMAND 
-		emcc ${CMAKE_CURRENT_SOURCE_DIR}/bindings.cpp $<TARGET_FILE:fortranRuntimeLib> -sEXPORTED_RUNTIME_METHODS=cwrap -sMODULARIZE -sENVIRONMENT=web -o out.js
+		emcc ${CMAKE_CURRENT_SOURCE_DIR}/bindings.cpp $<TARGET_FILE:fortranRuntimeLib> -sEXPORTED_RUNTIME_METHODS=[cwrap,stringToNewUTF8] -sEXPORTED_FUNCTIONS=_free -sMODULARIZE -sENVIRONMENT=web -o out.js
 	DEPENDS
 		bindings.cpp
 		$<TARGET_FILE:fortranRuntimeLib>

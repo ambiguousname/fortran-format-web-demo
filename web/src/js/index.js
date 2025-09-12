@@ -48,19 +48,25 @@ async function load() {
 	})
 
 	class Formatter {
-		static beginExternalFormattedOutput = m.cwrap("BeginExternalFormattedOutput", "number", ["string", "number", "number"]);
-		static outputAscii = m.cwrap("OutputAscii", "number", ["number", "string", "number"])
+		static outputInteger64 = m.cwrap("OutputInteger64", "number", ["number", "number"]);
+		static outputAscii = m.cwrap("OutputAscii", "number", ["number", "string", "number"]);
 		static endIo = m.cwrap("EndIoStatement", "", ["number"]);
 		static beginNewUnit = m.cwrap("BeginOpenNewUnit", "number", [""]);
-		static beginClose = m.cwrap("BeginClose", "number", ["number"])
+		static beginClose = m.cwrap("BeginClose", "number", ["number"]);
 		static getNewUnit = m.cwrap("GetNewUnit", "number", ["number"]);
 		static setScratch = m.cwrap("SetScratch", "boolean", [""]);
 	}
 
 	class FormattedOutput {
+		#str;
 		#io;
 		constructor(formatString, unit) {
-			this.#io = Formatter.beginExternalFormattedOutput(formatString, formatString.length, unit);
+			this.#str = m.stringToNewUTF8(formatString);
+			this.#io = m._BeginExternalFormattedOutput(this.#str, formatString.length, unit);
+		}
+
+		addInteger(i) {
+			Formatter.outputInteger64(this.#io, i);
 		}
 
 		addAscii(string) {
@@ -69,6 +75,7 @@ async function load() {
 
 		print() {
 			Formatter.endIo(this.#io);
+			m._free(this.#str);
 		}
 	}
 
@@ -83,18 +90,19 @@ async function load() {
 			// Formatter.endIo(newUnit);
 
 			let f = new FormattedOutput(`(${formatStmt.value})`, 6);
-			f.print();
-
+			
 			for (let v of variables.children()) {
 				switch(v.type) {
 					case TYPES.INTEGER:
-						f.addInteger(v.value);
+						f.addInteger(parseInt(v.value));
 						break;
 					default:
 						alert("TODO");
 						break;
 				}
 			}
+			
+			f.print();
 
 			// let close = Formatter.beginClose(i);
 			// Formatter.endIo(close);
@@ -116,7 +124,7 @@ async function load() {
 	if (!runFirst) {
 		updateFormatStmt();
 		runFormatting();
-		runFirst = false;
+		runFirst = true;
 	}
 }
 
