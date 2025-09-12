@@ -47,7 +47,11 @@ export class VariableHandler {
 		}
 
 		let v = new VariableInput(this, name);
-		this.#variableNames.add(v);
+		this.append(v);
+	}
+
+	append(v) {
+		this.#variableNames.add(v.name);
 		this.#elem.appendChild(v);
 	}
 
@@ -57,7 +61,7 @@ export class VariableHandler {
 		this.updateDisplay();
 	}
 
-	variableList() {
+	displayVariableList() {
 		let string = "";
 		for (let v of this.#elem.children) {
 			string += v.name + " ";

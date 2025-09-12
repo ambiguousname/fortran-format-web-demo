@@ -1,7 +1,7 @@
 var Module = require("Formatter/out");
 require("bootstrap");
 
-const { VariableInput, VariableHandler } = require("./variables.js");
+const { VariableHandler } = require("./variables.js");
 
 let runFirst = false;
 
@@ -19,7 +19,7 @@ async function load() {
 	function updateFormatStmt() {
 		stmtText.textContent = `10 FORMAT(${formatStmt.value})`;
 		// Cheap hack to insert line breaks and avoid escaping sanitized strings:
-		stmtText.innerHTML += `<br> WRITE(*, 10) ${variables.variableList()}`;
+		stmtText.innerHTML += `<br> WRITE(*, 10) ${variables.displayVariableList()}`;
 	}
 
 	addVar.addEventListener("click", () => {
