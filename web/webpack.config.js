@@ -6,7 +6,7 @@ module.exports = {
     'main': path.resolve(__dirname, './src/js/index.js'),
     'style': path.resolve(__dirname, './src/scss/main.scss'),
   },
-  mode: "development",
+  mode: "production",
   module: {
     rules: [
       {
