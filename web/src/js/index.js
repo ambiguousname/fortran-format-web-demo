@@ -1,10 +1,11 @@
 var Module = require("Formatter/out");
 require("bootstrap");
 
-const { VariableHandler, TYPES } = require("./variables.js");
+const { VariableHandler, TYPES, VariableInput } = require("./variables.js");
 
 let urlInfo = new URLSearchParams(window.location.search);
 let stmt = urlInfo.get("stmt");
+let variablesInfo = urlInfo.get("variables");
 
 async function load() {
 	let licenseNav = document.getElementById("license-nav");
@@ -16,7 +17,6 @@ async function load() {
 		let text = (fetch(`./licenses/${license}.txt`).then((res) => {
 			return res.text()
 		}));
-		console.log(license);
 
 		let listItem = document.createElement("li");
 		listItem.classList.add("nav-item");
@@ -56,6 +56,14 @@ async function load() {
 	
 	let addVar = document.getElementById("add-variable");
 	let variables = new VariableHandler(document.getElementById("variables"));
+
+	if (variablesInfo) {
+		let existingVariables = variablesInfo.split(",");
+		for (let v of existingVariables) {
+			let [type, value] = v.split(":");
+			variables.append(VariableInput.fromTypeAndValue(variables, type, value));
+		}
+	}
 
 	let output = document.getElementById("output-text");
 	let formatStmt = document.getElementById("format-stmt");

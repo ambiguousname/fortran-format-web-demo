@@ -42,6 +42,15 @@ export class VariableInput extends HTMLElement {
 		return this.#type;
 	}
 
+	set value(v) {
+		switch (this.#type) {
+			case TYPES.INTEGER:
+			default:
+				this.#variableInput.value = v;
+				break;
+		}
+	}
+
 	get value() {
 		switch (this.#type) {
 			case TYPES.INTEGER:
@@ -52,6 +61,20 @@ export class VariableInput extends HTMLElement {
 
 	delete() {
 		this.#parent.remove(this);
+	}
+
+	static fromTypeAndValue(parent, type, value) {
+		let newTy;
+		switch(type) {
+			case "i":
+				newTy = TYPES.INTEGER;
+				break;
+			default:
+				return null;
+		}
+		let self = new VariableInput(parent, newTy);
+		self.value = value;
+		return self;
 	}
 }
 customElements.define("variable-input", VariableInput);
