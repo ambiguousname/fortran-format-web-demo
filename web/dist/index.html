@@ -59,8 +59,26 @@
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
-						<h5>More variables than edit descriptors</h5>
-						<p></p>
+						<h5>Flang-RT</h5>
+						<p>
+							This demo uses a modified version of <a href="https://github.com/llvm/llvm-project/tree/release/20.x/flang/include">Flang-RT <code>20.1.7</code></a>. 
+							There are no guarantees that every possible call of <code>FORMAT</code> will be valid in this demo. The aim is to capture most general uses of <code>FORMAT</code> rather than to account for every edge case.
+						</p>
+						<h5>Comma Linting Unsupported</h5>
+						<p>
+							The following statement: <br>
+							<pre>
+10 FORMAT(I2 I2)
+WRITE(*, 10) 20, 30
+							</pre>
+							Will normally produce the Flang compiler error:
+							<pre>
+error: Expected ',' or ')' in format expression
+	10 FORMAT(I2 I2)
+							</pre>
+
+							However, the Flang runtime library does not check for the existence of these commas itself when reading through print statements, so neither does this tool.
+						</p>
 					</div>
 				</div>
 			</div>
