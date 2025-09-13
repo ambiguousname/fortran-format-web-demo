@@ -103,14 +103,14 @@ error: Expected ',' or ')' in format expression
 			<link rel="stylesheet" href="style.css"/>
 			<div class="row">
 				<div class="d-inline-flex">
-					<select class="form-select">
+					<select class="form-select" id="type-select">
 						<option selected>Integer</option>
 						<option>Real</option>
 						<option>Complex</option>
 						<option>String</option>
 						<option>Logical</option>
 					</select>
-					<input type="number" class="form-control" value="0" step="1" id="value"/>
+					<div id="variable-input-container"><input type="number" class="form-control" value="0" step="1"/></div>
 					<button type="button" class="btn btn-outline-danger" id="delete"><i class="bi bi-trash"></i></button>
 				</div>
 			</div>

@@ -52,7 +52,6 @@ async function load() {
 			first = false;
 		}
 	}
-	// licenseBody.innerText = 
 	
 	let addVar = document.getElementById("add-variable");
 	let variables = new VariableHandler(document.getElementById("variables"));

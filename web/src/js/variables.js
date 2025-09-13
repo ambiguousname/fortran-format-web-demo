@@ -10,7 +10,7 @@ export class VariableInput extends HTMLElement {
 	#parent;
 	#type;
 
-	#variableInput;
+	#variableInputContainer;
 	constructor(parent, type) {
 		super();
 		this.#parent = parent;
@@ -22,15 +22,102 @@ export class VariableInput extends HTMLElement {
 
 		shadow.getElementById("delete").addEventListener("click", this.delete.bind(this));
 
-		this.#variableInput = shadow.getElementById("value");
-		this.#variableInput.addEventListener("input", () => {
-			this.#parent.updateDisplay();
+		this.#variableInputContainer = shadow.getElementById("variable-input-container");
+
+		let selected = shadow.getElementById("type-select");
+		selected.addEventListener("input", () => {
+			console.log(selected);
+			this.#updateType(selected.value);
 		});
 
 		this.#type = type;
-		switch(this.#type) {
-			// Do nothing, this is selected by default:
+		selected.children.item(this.#type).selected = true;
+		this.#updateType(Object.keys(TYPES)[this.#type]);
+	}
+
+	#updateType(newTypeStr) {
+		let prevVal;
+		switch (this.#type) {
 			case TYPES.INTEGER:
+			case TYPES.REAL:
+				prevVal = this.value;
+				break;
+			case TYPES.COMPLEX:
+				prevVal = this.value[0];
+				break;
+			default:
+				alert("TODO");
+				break;
+		}
+
+		this.#type = TYPES[newTypeStr.toUpperCase()];
+		this.#variableInputContainer.innerHTML = "";
+		
+		switch(this.#type) {
+			case TYPES.INTEGER:
+				{
+					let input = document.createElement("input");
+					input.type = "number";
+					input.classList.add("form-control");
+					input.value = prevVal;
+					input.step = "1";
+
+					input.addEventListener("input", () => {
+						this.#parent.updateDisplay();
+					});
+
+					this.#variableInputContainer.appendChild(input);
+				}
+				break;
+			case TYPES.REAL:
+				{
+					let input = document.createElement("input");
+					input.type = "number";
+					input.classList.add("form-control");
+					input.value = prevVal;
+					input.step = "0.01";
+					
+					input.addEventListener("input", () => {
+						this.#parent.updateDisplay();
+					});
+
+					this.#variableInputContainer.appendChild(input);
+				}
+				break;
+			case TYPES.COMPLEX:
+				{
+					let input = document.createElement("input");
+					input.type = "number";
+					input.classList.add("form-control");
+					input.value = prevVal;
+					input.step = "0.01";
+					
+					input.addEventListener("input", () => {
+						this.#parent.updateDisplay();
+					});
+
+					let complexDiv = document.createElement("div");
+					complexDiv.classList.add("input-group");
+
+					let complexInput = document.createElement("input");
+					complexInput.type = "number";
+					complexInput.classList.add("form-control");
+					complexInput.value = "0";
+					complexInput.step = "0.01";
+
+					complexInput.addEventListener("input", () => {
+						this.#parent.updateDisplay();
+					});
+
+					let iSuffix = document.createElement("span");
+					iSuffix.classList.add("input-group-text");
+					iSuffix.innerText = "i";
+
+					this.#variableInputContainer.appendChild(input);
+					complexDiv.appendChild(complexInput);
+					complexDiv.appendChild(iSuffix);
+					this.#variableInputContainer.appendChild(complexDiv);
+				}
 				break;
 			default:
 				alert("TODO");
@@ -44,18 +131,26 @@ export class VariableInput extends HTMLElement {
 
 	set value(v) {
 		switch (this.#type) {
+			case TYPES.COMPLEX:
+				this.#variableInputContainer.children.item(0).value = v[0];
+				this.#variableInputContainer.children.item(1).value = v[1];
+				break;
 			case TYPES.INTEGER:
+			case TYPES.REAL:
 			default:
-				this.#variableInput.value = v;
+				this.#variableInputContainer.children.item(0).value = v;
 				break;
 		}
 	}
 
 	get value() {
 		switch (this.#type) {
+			case TYPES.COMPLEX:
+				return [this.#variableInputContainer.children.item(0).value, this.#variableInputContainer.children.item(1).value];
 			case TYPES.INTEGER:
+			case TYPES.REAL:
 			default:
-				return this.#variableInput.value;
+				return this.#variableInputContainer.children.item(0).value;
 		}
 	}
 
@@ -68,6 +163,13 @@ export class VariableInput extends HTMLElement {
 		switch(type) {
 			case "i":
 				newTy = TYPES.INTEGER;
+				break;
+			case "r":
+				newTy = TYPES.REAL;
+				break;
+			case "c":
+				newTy = TYPES.COMPLEX;
+				value = value.split("+");
 				break;
 			default:
 				return null;
