@@ -26,8 +26,8 @@ export class VariableInput extends HTMLElement {
 
 		let selected = shadow.getElementById("type-select");
 		selected.addEventListener("input", () => {
-			console.log(selected);
 			this.#updateType(selected.value);
+			this.#parent.updateDisplay();
 		});
 
 		this.#type = type;
@@ -44,6 +44,13 @@ export class VariableInput extends HTMLElement {
 				break;
 			case TYPES.COMPLEX:
 				prevVal = this.value[0];
+				break;
+			case TYPES.LOGICAL:
+				if (this.value) {
+					prevVal = 1;
+				} else {
+					prevVal = 0;
+				}
 				break;
 			default:
 				alert("TODO");
@@ -119,6 +126,45 @@ export class VariableInput extends HTMLElement {
 					this.#variableInputContainer.appendChild(complexDiv);
 				}
 				break;
+			case TYPES.LOGICAL:
+				{
+					let inputDiv = document.createElement("div");
+					inputDiv.classList.add("form-check");
+
+					let formInput = document.createElement("input");
+					formInput.classList.add("form-check-input");
+					formInput.type = "checkbox";
+					formInput.id = "logical";
+					formInput.value = "";
+
+					let formLabel = document.createElement("label");
+					formLabel.classList.add("form-check-label");
+					formLabel.setAttribute("for", "logical");
+					
+					let checked = prevVal !== 1;
+					formInput.checked = checked;
+
+					if (checked) {
+						formLabel.innerText = ".TRUE.";
+					} else {
+						formLabel.innerText = ".FALSE.";
+					}
+
+					formInput.addEventListener("input", () => {
+						let bool = formInput.checked;
+						if (bool) {
+							formLabel.innerText = ".TRUE.";
+						} else {
+							formLabel.innerText = ".FALSE.";
+						}
+						this.#parent.updateDisplay();
+					});
+
+					inputDiv.appendChild(formInput);
+					inputDiv.appendChild(formLabel);
+					this.#variableInputContainer.appendChild(inputDiv);
+				}
+				break;
 			default:
 				alert("TODO");
 				break;
@@ -132,8 +178,12 @@ export class VariableInput extends HTMLElement {
 	set value(v) {
 		switch (this.#type) {
 			case TYPES.COMPLEX:
-				this.#variableInputContainer.children.item(0).value = v[0];
-				this.#variableInputContainer.children.item(1).value = v[1];
+				let val = v.replace("(", "").replace(")", "").split(",");
+				this.#variableInputContainer.children.item(0).value = val[0];
+				this.#variableInputContainer.children.item(1).children.item(0).value = val[1];
+				break;
+			case TYPES.LOGICAL:
+				this.#variableInputContainer.children.item(0).children.item(0).checked = (v === ".TRUE.");
 				break;
 			case TYPES.INTEGER:
 			case TYPES.REAL:
@@ -146,7 +196,14 @@ export class VariableInput extends HTMLElement {
 	get value() {
 		switch (this.#type) {
 			case TYPES.COMPLEX:
-				return [this.#variableInputContainer.children.item(0).value, this.#variableInputContainer.children.item(1).value];
+				return `(${this.#variableInputContainer.children.item(0).value},${this.#variableInputContainer.children.item(1).children.item(0).value})`;
+			case TYPES.LOGICAL:
+				let checked = this.#variableInputContainer.children.item(0).children.item(0).checked;
+				if (checked) {
+					return ".TRUE.";
+				} else {
+					return ".FALSE.";
+				}
 			case TYPES.INTEGER:
 			case TYPES.REAL:
 			default:
@@ -169,7 +226,6 @@ export class VariableInput extends HTMLElement {
 				break;
 			case "c":
 				newTy = TYPES.COMPLEX;
-				value = value.split("+");
 				break;
 			default:
 				return null;
