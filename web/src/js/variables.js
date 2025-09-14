@@ -43,7 +43,7 @@ export class VariableInput extends HTMLElement {
 				prevVal = this.value;
 				break;
 			case TYPES.COMPLEX:
-				prevVal = this.value[0];
+				prevVal = this.value.split(",")[0].replace("(", "");
 				break;
 			case TYPES.LOGICAL:
 				if (this.value) {
@@ -52,8 +52,14 @@ export class VariableInput extends HTMLElement {
 					prevVal = 0;
 				}
 				break;
+			case TYPES.STRING:
+				prevVal = parseFloat(this.value.substring(1, this.value.length - 1));
+				if (isNaN(prevVal)) {
+					prevVal = 0;
+				}
+				break;
 			default:
-				alert("TODO");
+				alert("Unsupported type.");
 				break;
 		}
 
@@ -165,8 +171,22 @@ export class VariableInput extends HTMLElement {
 					this.#variableInputContainer.appendChild(inputDiv);
 				}
 				break;
+			case TYPES.STRING:
+				{
+					let input = document.createElement("input");
+					input.type = "text";
+					input.classList.add("form-control");
+					input.value = prevVal;
+					
+					input.addEventListener("input", () => {
+						this.#parent.updateDisplay();
+					});
+
+					this.#variableInputContainer.appendChild(input);
+				}
+				break;
 			default:
-				alert("TODO");
+				alert("Unsupported variable type.");
 				break;
 		}
 	}
@@ -184,6 +204,9 @@ export class VariableInput extends HTMLElement {
 				break;
 			case TYPES.LOGICAL:
 				this.#variableInputContainer.children.item(0).children.item(0).checked = (v === ".TRUE.");
+				break;
+			case TYPES.STRING:
+				this.#variableInputContainer.children.item(0).value = v.substring(1, v.length - 1);
 				break;
 			case TYPES.INTEGER:
 			case TYPES.REAL:
@@ -204,6 +227,8 @@ export class VariableInput extends HTMLElement {
 				} else {
 					return ".FALSE.";
 				}
+			case TYPES.STRING:
+				return `"${this.#variableInputContainer.children.item(0).value}"`;
 			case TYPES.INTEGER:
 			case TYPES.REAL:
 			default:
@@ -226,6 +251,12 @@ export class VariableInput extends HTMLElement {
 				break;
 			case "c":
 				newTy = TYPES.COMPLEX;
+				break;
+			case "l":
+				newTy = TYPES.LOGICAL;
+				break;
+			case "s":
+				newTy = TYPES.STRING;
 				break;
 			default:
 				return null;
