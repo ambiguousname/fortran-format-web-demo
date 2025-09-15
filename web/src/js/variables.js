@@ -135,7 +135,7 @@ export class VariableInput extends HTMLElement {
 			case TYPES.LOGICAL:
 				{
 					let inputDiv = document.createElement("div");
-					inputDiv.classList.add("form-check");
+					inputDiv.classList.add("form-check", "m-3");
 
 					let formInput = document.createElement("input");
 					formInput.classList.add("form-check-input");
