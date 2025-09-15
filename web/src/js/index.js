@@ -103,7 +103,10 @@ async function load() {
 
 		class Formatter {
 			static outputInteger64 = m.cwrap("OutputInteger64", "number", ["number", "number"]);
-			static outputAscii = m.cwrap("OutputAscii", "number", ["number", "string", "number"]);
+			static outputReal64 = m.cwrap("OutputReal64", "number", ["number", "number"]);
+			static outputComplex64 = m.cwrap("OutputComplex64", "number", ["number", "number", "number"]);
+			static outputAscii = m.cwrap("OutputAscii", "number", ["number", "number", "number"]);
+			static outputLogical = m.cwrap("OutputLogical", "number", ["number", "number"]);
 			static endIo = m.cwrap("EndIoStatement", "", ["number"]);
 			static beginNewUnit = m.cwrap("BeginOpenNewUnit", "number", [""]);
 			static beginClose = m.cwrap("BeginClose", "number", ["number"]);
@@ -112,30 +115,48 @@ async function load() {
 		}
 
 		class FormattedOutput {
-			#str;
+			#strings = [];
 			#io;
 			constructor(formatString, unit) {
-				this.#str = m.stringToNewUTF8(formatString);
-				this.#io = m._BeginExternalFormattedOutput(this.#str, formatString.length, unit);
+				let ptr = m.stringToNewUTF8(formatString);
+				this.#strings.push(ptr);
+				this.#io = m._BeginExternalFormattedOutput(ptr, formatString.length, unit);
 			}
 
 			addInteger(i) {
 				Formatter.outputInteger64(this.#io, i);
 			}
 
+			addReal(real) {
+				Formatter.outputReal64(this.#io, real);
+			}
+
+			addComplex(real, i) {
+				Formatter.outputComplex64(this.#io, real, i);
+			}
+
 			addAscii(string) {
-				Formatter.outputAscii(this.#io, string, string.length);
+				let str = string.substring(1, string.length - 1);
+				let ptr = m.stringToNewUTF8(str);
+				this.#strings.push(ptr);
+				Formatter.outputAscii(this.#io, ptr, str.length);
+			}
+
+			addBool(b) {
+				Formatter.outputLogical(this.#io, b);
 			}
 
 			print() {
 				Formatter.endIo(this.#io);
-				m._free(this.#str);
+				for (let ptr in this.#strings) {
+					m._free(ptr);
+				}
 			}
 		}
 
 		async function runFormatting() {
 			output.innerText = "";
-			try {
+			// try {
 				// We create a scratch pad file each time, in case the current unit encounters an error and becomes unclosable
 				// (User can reload if it starts impacting memory):
 				// let newUnit = Formatter.beginNewUnit();
@@ -150,8 +171,21 @@ async function load() {
 						case TYPES.INTEGER:
 							f.addInteger(parseInt(v.value));
 							break;
+						case TYPES.REAL:
+							f.addReal(parseFloat(v.value));
+							break;
+						case TYPES.COMPLEX:
+							let val = v.value.substring(1, v.value.length - 1).split(",");
+							f.addComplex(parseInt(val[0]), parseInt(val[1]));
+							break;
+						case TYPES.STRING:
+							f.addAscii(v.value);
+							break;
+						case TYPES.LOGICAL:
+							f.addBool(val === ".TRUE.");
+							break;
 						default:
-							alert("TODO");
+							alert("Unsupported type.");
 							break;
 					}
 				}
@@ -166,11 +200,12 @@ async function load() {
 				// f.addAscii("Test");
 				// f.outputAscii(io, );
 				// m.ccall("_FortranAioOutputAscii", "number", ["string", "number"], ["('Hello')", 9]);
-			} catch(e) {
-				printErr(e);
-				// Instead of worrying about reading a filesystem, just reload the whole module:
-				setupFormatter();
-			}
+			// } catch(e) {
+			// 	console.error(e);
+			// 	// printErr(e);
+			// 	// Instead of worrying about reading a filesystem, just reload the whole module:
+			// 	setupFormatter();
+			// }
 		}
 
 		document.getElementById("run").onclick = runFormatting;
