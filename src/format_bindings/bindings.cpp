@@ -15,6 +15,11 @@ extern "C" Cookie BeginExternalFormattedOutput(const char* fmt_string, std::size
 }
 
 EMSCRIPTEN_KEEPALIVE
+extern "C" Cookie BeginExternalListOutput() {
+	return _FortranAioBeginExternalListOutput();
+}
+
+EMSCRIPTEN_KEEPALIVE
 extern "C" void EndIoStatement(Cookie io) {
 	_FortranAioEndIoStatement(io);
 }

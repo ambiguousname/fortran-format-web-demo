@@ -127,6 +127,7 @@ async function load() {
 
 	let output = document.getElementById("output-text");
 	let formatStmt = document.getElementById("format-stmt");
+	let formatType = document.getElementById("format-type");
 
 	fmtUpdate.init(variables);
 	setupFormatSwitch();
@@ -174,10 +175,17 @@ async function load() {
 		class FormattedOutput {
 			#strings = [];
 			#io;
-			constructor(formatString, unit) {
+			constructor(formatString, unit, type) {
 				let ptr = m.stringToNewUTF8(formatString);
 				this.#strings.push(ptr);
-				this.#io = m._BeginExternalFormattedOutput(ptr, formatString.length, unit);
+				switch (type) {
+					case "List Directed Formatting":
+						this.#io = m._BeginExternalListOutput();
+						break;
+					default:
+						this.#io = m._BeginExternalFormattedOutput(ptr, formatString.length, unit);
+						break;
+				}
 			}
 
 			addInteger(i) {
@@ -221,7 +229,7 @@ async function load() {
 				// let i = Formatter.getNewUnit(newUnit);
 				// Formatter.endIo(newUnit);
 
-				let f = new FormattedOutput(`(${formatStmt.value})`, 6);
+				let f = new FormattedOutput(`(${formatStmt.value})`, 6, formatType.value);
 				
 				for (let v of variables.children()) {
 					switch(v.type) {
