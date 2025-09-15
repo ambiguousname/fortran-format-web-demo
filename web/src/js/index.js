@@ -176,7 +176,7 @@ async function load() {
 							break;
 						case TYPES.COMPLEX:
 							let val = v.value.substring(1, v.value.length - 1).split(",");
-							f.addComplex(parseInt(val[0]), parseInt(val[1]));
+							f.addComplex(parseFloat(val[0]), parseFloat(val[1]));
 							break;
 						case TYPES.STRING:
 							f.addAscii(v.value);
