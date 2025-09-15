@@ -50,3 +50,18 @@ EMSCRIPTEN_KEEPALIVE
 extern "C" bool OutputInteger64(Cookie io, std::int64_t i) {
 	return _FortranAioOutputInteger64(io, i);
 }
+
+EMSCRIPTEN_KEEPALIVE
+extern "C" bool OutputReal64(Cookie io, double real) {
+	return _FortranAioOutputReal64(io, real);
+}
+
+EMSCRIPTEN_KEEPALIVE
+extern "C" bool OutputComplex64(Cookie io, double real, double i) {
+	return _FortranAioOutputComplex64(io, real, i);
+}
+
+EMSCRIPTEN_KEEPALIVE
+extern "C" bool OutputLogical(Cookie io, bool l) {
+	return _FortranAioOutputLogical(io, l);
+}

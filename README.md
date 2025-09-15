@@ -6,25 +6,18 @@ Major differences between that tutorial and this one are that I'm using [LLVM 20
 # Compiling
 Feel free to skip to Part Four if you have no intention of changing the binary `.wasm` code.
 
-## Part One: Build Flang for WebAssembly
-
-1. Clone [LLVM](https://github.com/llvm/llvm-project) on Github.
-2. Apply the Git patch under `llvm/llvm-wasm.diff`.
-3. Configure and build with CMAKE. Make sure `-DDLLVM_TARGETS_TO_BUILD="WebAssembly"` is set. The only projects you need to enable are `-DLLVM_ENABLE_PROJECTS="clang;flang;mlir"`. `-DCMAKE_BUILD_TYPE=MinSizeRel` is recommended.
-4. Build `flang`.
-
-Copy the binaries to the `binaries/flang` folder of the git project.
-
-## Part Two: Build libFortranRuntime for WebAssembly
+## Part One: Build libFortranRuntime for WebAssembly
 
 The `FORMAT` statement is actually a bunch of disguised calls to `libFortranRuntime`, so we need to compile these calls to WebAssembly:
 
 1. Install and activate the [emscripten SDK](https://emscripten.org/docs/getting_started).
-2. Prepare `libFortranRuntime` with `emcmake`: `emcmake cmake -S flang/runtime`, then build.
+2. Build `libFortranRuntime` and `libFortranDecimal`. You can configure with:
+	- `emcmake cmake -S flang/runtime -B flang/runtime`
+	- `emcmake cmake -S flang/lib/Decimal -B flang/lib/Decimal`
+	- Then make with `emcmake cmake --build <DIRECTORY>` for each.
+3. Copy the built libraries to the `binaries/libFortran` folder of the git project.
 
-Copy the binaries to the `binaries/libFortranRuntime` folder of the git project.
-
-## Part Three: Building the Program
+## Part Two: Building the Program
 
 ```bash
 emcmake cmake -B build
@@ -35,9 +28,8 @@ cmake --build build --target=fortran_wasm
 #### Missing variable is: CMAKE_Fortran_PREPROCESS_SOURCE
 I believe this is something specific to Ninja, so you can just re-run `emcmake cmake -B build` and it should be fixed.
 
-## Part Four: Building Web Demo
+## Part Three: Running the Web Demo
 ```bash
 npm -C web ci
-npm -C web run build
 npm -C web run start --mode development
 ```
