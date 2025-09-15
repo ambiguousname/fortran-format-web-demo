@@ -156,7 +156,7 @@ async function load() {
 
 		async function runFormatting() {
 			output.innerText = "";
-			// try {
+			try {
 				// We create a scratch pad file each time, in case the current unit encounters an error and becomes unclosable
 				// (User can reload if it starts impacting memory):
 				// let newUnit = Formatter.beginNewUnit();
@@ -200,12 +200,12 @@ async function load() {
 				// f.addAscii("Test");
 				// f.outputAscii(io, );
 				// m.ccall("_FortranAioOutputAscii", "number", ["string", "number"], ["('Hello')", 9]);
-			// } catch(e) {
-			// 	console.error(e);
-			// 	// printErr(e);
-			// 	// Instead of worrying about reading a filesystem, just reload the whole module:
-			// 	setupFormatter();
-			// }
+			} catch(e) {
+				console.error(e);
+				// printErr(e);
+				// Instead of worrying about reading a filesystem, just reload the whole module:
+				setupFormatter();
+			}
 		}
 
 		document.getElementById("run").onclick = runFormatting;
