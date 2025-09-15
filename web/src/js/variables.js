@@ -30,9 +30,10 @@ export class VariableInput extends HTMLElement {
 			this.#parent.updateDisplay();
 		});
 
+		this.#type = 0;
+		this.#updateType(Object.keys(TYPES)[type]);
 		this.#type = type;
 		selected.children.item(this.#type).selected = true;
-		this.#updateType(Object.keys(TYPES)[this.#type]);
 	}
 
 	#updateType(newTypeStr) {
@@ -43,7 +44,7 @@ export class VariableInput extends HTMLElement {
 				prevVal = this.value;
 				break;
 			case TYPES.COMPLEX:
-				prevVal = this.value.split(",")[0].substring(6);
+				prevVal = this.value.substring(6, this.value.length - 1).split(",")[0];
 				break;
 			case TYPES.LOGICAL:
 				if (this.value === ".TRUE.") {

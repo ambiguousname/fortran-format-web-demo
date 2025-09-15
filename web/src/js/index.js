@@ -3,10 +3,6 @@ require("bootstrap");
 
 const { VariableHandler, TYPES, VariableInput } = require("./variables.js");
 
-let urlInfo = new URLSearchParams(window.location.search);
-let stmt = urlInfo.get("stmt");
-let variablesInfo = urlInfo.get("variables");
-
 class FormatUpdaterSingleton {
 	constructor() {}
 
@@ -111,26 +107,97 @@ function setupLicenses() {
 	}
 }
 
+function urlHandle(variables) {
+	let formatStmt = document.getElementById("format-stmt");
+	let formatType = document.getElementById("format-type");
+
+	let urlInfo = new URLSearchParams(window.location.search);
+	let stmt = urlInfo.get("stmt");
+	let variablesInfo = urlInfo.get("variables");
+	let type = urlInfo.get("type");
+
+	if (variablesInfo) {
+		let existingVariables = variablesInfo.split(";");
+		for (let v of existingVariables) {
+			let [type, value] = v.split("=");
+			variables.append(VariableInput.fromTypeAndValue(variables, type, value));
+		}
+	}
+	
+	if (stmt !== null) {
+		formatStmt.value = stmt;
+		fmtUpdate.update();
+	}
+
+	if (type) {
+		formatType.value = type;
+		// Too lazy to refactor, but this kind of sucks:
+		if (type === "List Directed Formatting"){
+			formatStmt.disabled = true;
+			formatStmt.parentElement.style.maxHeight = "0%";
+		}
+	}
+
+	let share = document.getElementById("share");
+	share.addEventListener("click", () => {
+		let p = new URLSearchParams();
+		p.append("stmt", formatStmt.value);
+		p.append("type", formatType.value);
+
+		let encodeV = [];
+		for (let v of variables.children()) {
+			let typeStr;
+			switch (v.type) {
+				case TYPES.INTEGER:
+					typeStr = "i";
+					break;
+				case TYPES.REAL:
+					typeStr = "r";
+					break;
+				case TYPES.COMPLEX:
+					typeStr = "c";
+					break;
+				case TYPES.STRING:
+					typeStr = "s";
+					break;
+				case TYPES.LOGICAL:
+					typeStr = "l";
+					break;					
+			}
+			encodeV.push(`${typeStr}=${v.value}`);
+		}
+		p.append("variables", encodeV.join(";"));
+
+		
+		let u = new URL(window.location.href);
+		u.search = p.toString();
+		let newSearch = u.toString();
+		navigator.clipboard.writeText(newSearch).then(() => {
+			share.textContent = "Copied to clipboard!";
+			setTimeout(() => {
+				share.innerHTML = `<i class="bi bi-share"></i> Share`;
+			}, 500);
+		});
+		window.history.replaceState({}, "", newSearch);
+	});
+
+}
+
 async function load() {
 	setupLicenses();
 
 	let addVar = document.getElementById("add-variable");
-	let variables = new VariableHandler(document.getElementById("variables"));
-
-	if (variablesInfo) {
-		let existingVariables = variablesInfo.split(",");
-		for (let v of existingVariables) {
-			let [type, value] = v.split(":");
-			variables.append(VariableInput.fromTypeAndValue(variables, type, value));
-		}
-	}
 
 	let output = document.getElementById("output-text");
 	let formatStmt = document.getElementById("format-stmt");
 	let formatType = document.getElementById("format-type");
 
+	
+	let variables = new VariableHandler(document.getElementById("variables"));
 	fmtUpdate.init(variables);
 	setupFormatSwitch();
+
+	urlHandle(variables);
 
 	addVar.addEventListener("click", () => {
 		variables.createNew();
@@ -139,11 +206,6 @@ async function load() {
 	variables.updateDisplay = fmtUpdate.update.bind(fmtUpdate);
 
 	formatStmt.addEventListener("input", fmtUpdate.update.bind(fmtUpdate));
-
-	if (stmt !== null) {
-		formatStmt.value = stmt;
-		fmtUpdate.update();
-	}
 
 	function printErr(e) {
 		output.innerText += e + "\n";
