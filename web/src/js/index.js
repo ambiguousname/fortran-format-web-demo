@@ -148,7 +148,7 @@ async function load() {
 
 			print() {
 				Formatter.endIo(this.#io);
-				for (let ptr in this.#strings) {
+				for (let ptr of this.#strings) {
 					m._free(ptr);
 				}
 			}
@@ -201,8 +201,7 @@ async function load() {
 				// f.outputAscii(io, );
 				// m.ccall("_FortranAioOutputAscii", "number", ["string", "number"], ["('Hello')", 9]);
 			} catch(e) {
-				console.error(e);
-				// printErr(e);
+				printErr(e);
 				// Instead of worrying about reading a filesystem, just reload the whole module:
 				setupFormatter();
 			}
