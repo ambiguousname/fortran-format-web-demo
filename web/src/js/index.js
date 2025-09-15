@@ -7,7 +7,64 @@ let urlInfo = new URLSearchParams(window.location.search);
 let stmt = urlInfo.get("stmt");
 let variablesInfo = urlInfo.get("variables");
 
-async function load() {
+class FormatUpdaterSingleton {
+	constructor() {}
+
+	#stmtText;
+	#variables;
+	#formatStmt;
+
+	#formatType;
+	init(variables) {
+		this.#stmtText = document.getElementById("stmt-text");
+		this.#formatStmt = document.getElementById("format-stmt");
+		this.#variables = variables;
+
+		this.#formatType = document.getElementById("format-type");
+	}
+	
+	update() {
+		let out;
+		switch (this.#formatType.value) {
+			case "Format Specification":
+				this.#stmtText.textContent = `10 FORMAT(${this.#formatStmt.value})`;
+				out = "<br> WRITE(*, 10)";
+				break;
+			case "List Directed Formatting":
+				this.#stmtText.textContent = "";
+				out = "WRITE(*, *)";
+				break;
+		}
+		// Cheap hack to insert line breaks and avoid escaping sanitized strings:
+		this.#stmtText.innerHTML += `${out} ${this.#variables.displayVariableList()}`;
+	}
+}
+
+let fmtUpdate = new FormatUpdaterSingleton();
+
+function setupFormatSwitch() {
+	let formatStmtDiv = document.getElementById("format-stmt-div");
+	let formatStmt = document.getElementById("format-stmt");
+	let formatType = document.getElementById("format-type");
+
+	function updateFormatType() {
+		switch (formatType.value) {
+			case "Format Specification":
+				formatStmt.disabled = false;
+				formatStmtDiv.style.maxHeight = "100%";
+				break;
+			case "List Directed Formatting":
+				formatStmtDiv.style.maxHeight = "0%";
+				formatStmt.disabled = true;
+				break;
+		}
+		fmtUpdate.update();
+	}
+	formatType.addEventListener("input", updateFormatType);
+	updateFormatType();
+}
+
+function setupLicenses() {
 	let licenseNav = document.getElementById("license-nav");
 	let licenseBody = document.getElementById("license-body");
 
@@ -52,7 +109,11 @@ async function load() {
 			first = false;
 		}
 	}
-	
+}
+
+async function load() {
+	setupLicenses();
+
 	let addVar = document.getElementById("add-variable");
 	let variables = new VariableHandler(document.getElementById("variables"));
 
@@ -67,24 +128,20 @@ async function load() {
 	let output = document.getElementById("output-text");
 	let formatStmt = document.getElementById("format-stmt");
 
-	let stmtText = document.getElementById("stmt-text");
-	function updateFormatStmt() {
-		stmtText.textContent = `10 FORMAT(${formatStmt.value})`;
-		// Cheap hack to insert line breaks and avoid escaping sanitized strings:
-		stmtText.innerHTML += `<br> WRITE(*, 10) ${variables.displayVariableList()}`;
-	}
+	fmtUpdate.init(variables);
+	setupFormatSwitch();
 
 	addVar.addEventListener("click", () => {
 		variables.createNew();
-		updateFormatStmt();
+		fmtUpdate.update();
 	});
-	variables.updateDisplay = updateFormatStmt;
+	variables.updateDisplay = fmtUpdate.update.bind(fmtUpdate);
 
-	formatStmt.addEventListener("input", updateFormatStmt);
+	formatStmt.addEventListener("input", fmtUpdate.update.bind(fmtUpdate));
 
 	if (stmt !== null) {
 		formatStmt.value = stmt;
-		updateFormatStmt();
+		fmtUpdate.update();
 	}
 
 	function printErr(e) {
@@ -216,7 +273,7 @@ async function load() {
 	}
 
 	// Handle URL decoding:
-	updateFormatStmt();
+	fmtUpdate.update();
 	setupFormatter();
 }
 

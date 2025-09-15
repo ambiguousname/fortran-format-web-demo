@@ -21,7 +21,14 @@
 			<div class="container">
 				<div class="row">
 					<div class="col">
-						<div class="input-group mb-3 code-group align-items-end">
+						<div class="form-floating">
+							<select class="form-select" id="format-type">
+								<option selected>Format Specification</option>
+								<option>List Directed Formatting</option>
+							</select>
+							<label for="format-type">Formatting Type</label>
+						</div>
+						<div class="input-group my-2 code-group align-items-end" id="format-stmt-div">
 							<div class="input-group-prepend">
 								<code class="input-group-text">10 FORMAT(</code>
 							</div>

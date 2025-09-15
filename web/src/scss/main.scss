@@ -22,3 +22,9 @@ $bootstrap-icons-font-dir: "bootstrap-icons/font/fonts";
 .modal-body {
 	overflow-wrap: break-word;
 }
+
+#format-stmt-div {
+	max-height: 100%;
+	overflow: hidden;
+	transition: max-height 0.2s;
+}
