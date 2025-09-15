@@ -175,7 +175,7 @@ async function load() {
 							f.addReal(parseFloat(v.value));
 							break;
 						case TYPES.COMPLEX:
-							let val = v.value.substring(1, v.value.length - 1).split(",");
+							let val = v.value.substring(6, v.value.length - 1).split(",");
 							f.addComplex(parseFloat(val[0]), parseFloat(val[1]));
 							break;
 						case TYPES.STRING:

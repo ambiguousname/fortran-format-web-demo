@@ -43,7 +43,7 @@ export class VariableInput extends HTMLElement {
 				prevVal = this.value;
 				break;
 			case TYPES.COMPLEX:
-				prevVal = this.value.split(",")[0].replace("(", "");
+				prevVal = this.value.split(",")[0].substring(6);
 				break;
 			case TYPES.LOGICAL:
 				if (this.value) {
@@ -198,7 +198,7 @@ export class VariableInput extends HTMLElement {
 	set value(v) {
 		switch (this.#type) {
 			case TYPES.COMPLEX:
-				let val = v.replace("(", "").replace(")", "").split(",");
+				let val = v.substring(6, v.length - 1).split(",");
 				this.#variableInputContainer.children.item(0).value = val[0];
 				this.#variableInputContainer.children.item(1).children.item(0).value = val[1];
 				break;
@@ -219,7 +219,7 @@ export class VariableInput extends HTMLElement {
 	get value() {
 		switch (this.#type) {
 			case TYPES.COMPLEX:
-				return `(${this.#variableInputContainer.children.item(0).value},${this.#variableInputContainer.children.item(1).children.item(0).value})`;
+				return `cmplx(${this.#variableInputContainer.children.item(0).value},${this.#variableInputContainer.children.item(1).children.item(0).value})`;
 			case TYPES.LOGICAL:
 				let checked = this.#variableInputContainer.children.item(0).children.item(0).checked;
 				if (checked) {
