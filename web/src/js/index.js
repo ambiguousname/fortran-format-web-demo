@@ -106,7 +106,7 @@ async function load() {
 			static outputReal64 = m.cwrap("OutputReal64", "number", ["number", "number"]);
 			static outputComplex64 = m.cwrap("OutputComplex64", "number", ["number", "number", "number"]);
 			static outputAscii = m.cwrap("OutputAscii", "number", ["number", "number", "number"]);
-			static outputLogical = m.cwrap("OutputLogical", "number", ["number", "number"]);
+			static outputLogical = m.cwrap("OutputLogical", "number", ["number", "boolean"]);
 			static endIo = m.cwrap("EndIoStatement", "", ["number"]);
 			static beginNewUnit = m.cwrap("BeginOpenNewUnit", "number", [""]);
 			static beginClose = m.cwrap("BeginClose", "number", ["number"]);
@@ -182,7 +182,7 @@ async function load() {
 							f.addAscii(v.value);
 							break;
 						case TYPES.LOGICAL:
-							f.addBool(val === ".TRUE.");
+							f.addBool(v.value === ".TRUE.");
 							break;
 						default:
 							alert("Unsupported type.");
