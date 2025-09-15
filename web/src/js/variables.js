@@ -46,7 +46,7 @@ export class VariableInput extends HTMLElement {
 				prevVal = this.value.split(",")[0].substring(6);
 				break;
 			case TYPES.LOGICAL:
-				if (this.value) {
+				if (this.value === ".TRUE.") {
 					prevVal = 1;
 				} else {
 					prevVal = 0;
@@ -147,7 +147,7 @@ export class VariableInput extends HTMLElement {
 					formLabel.classList.add("form-check-label");
 					formLabel.setAttribute("for", "logical");
 					
-					let checked = prevVal !== 1;
+					let checked = prevVal !== 0;
 					formInput.checked = checked;
 
 					if (checked) {
