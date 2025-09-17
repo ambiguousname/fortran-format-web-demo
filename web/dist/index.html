@@ -71,8 +71,22 @@
 					<div class="modal-body">
 						<h5>Flang-RT</h5>
 						<p>
-							This demo uses a modified version of <a href="https://github.com/llvm/llvm-project/tree/release/20.x/flang/include">Flang-RT <code>20.1.7</code></a>. 
-							There are no guarantees that every possible call of <code>FORMAT</code> will be valid in this demo. The aim is to capture most general uses of <code>FORMAT</code> rather than to account for every edge case.
+							This demo uses a modified version of <a href="https://github.com/llvm/llvm-project/tree/release/20.x/flang/include">Flang-RT <code>20.1.7</code></a>.
+						</p>
+						<p>
+							Because Flang-RT must support a wide array of FORTRAN standards, not every valid call of <code>FORMAT</code> in this demo will be supported across all versions of FORTRAN. 
+						</p>
+
+						<p>
+							For instance, the following is unsupported as of FORTRAN 95:
+						</p>
+						
+						<pre>
+WRITE(*, "(5HHello)")
+						</pre>
+
+						<p>
+							But most compilers will still compile the above (albeit with warnings if you set the <code>-std</code> flag).
 						</p>
 						<h5>Comma Linting Unsupported</h5>
 						<p>
