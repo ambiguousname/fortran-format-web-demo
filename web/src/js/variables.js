@@ -75,6 +75,7 @@ export class VariableInput extends HTMLElement {
 					input.classList.add("form-control");
 					input.value = prevVal;
 					input.step = "1";
+					input.ariaLabel = "Integer Value";
 
 					input.addEventListener("input", () => {
 						this.#parent.updateDisplay();
@@ -90,6 +91,7 @@ export class VariableInput extends HTMLElement {
 					input.classList.add("form-control");
 					input.value = prevVal;
 					input.step = "0.01";
+					input.ariaLabel = "Real Value";
 					
 					input.addEventListener("input", () => {
 						this.#parent.updateDisplay();
@@ -105,6 +107,7 @@ export class VariableInput extends HTMLElement {
 					input.classList.add("form-control");
 					input.value = prevVal;
 					input.step = "0.01";
+					input.ariaLabel = "Real Component Value";
 					
 					input.addEventListener("input", () => {
 						this.#parent.updateDisplay();
@@ -118,6 +121,7 @@ export class VariableInput extends HTMLElement {
 					complexInput.classList.add("form-control");
 					complexInput.value = "0";
 					complexInput.step = "0.01";
+					complexInput.ariaLabel = "Imaginary Component Value";
 
 					complexInput.addEventListener("input", () => {
 						this.#parent.updateDisplay();
@@ -143,6 +147,7 @@ export class VariableInput extends HTMLElement {
 					formInput.type = "checkbox";
 					formInput.id = "logical";
 					formInput.value = "";
+					formInput.ariaLabel = "Logical Value";
 
 					let formLabel = document.createElement("label");
 					formLabel.classList.add("form-check-label");
@@ -178,6 +183,7 @@ export class VariableInput extends HTMLElement {
 					input.type = "text";
 					input.classList.add("form-control");
 					input.value = prevVal;
+					input.ariaLabel = "String Value";
 					
 					input.addEventListener("input", () => {
 						this.#parent.updateDisplay();

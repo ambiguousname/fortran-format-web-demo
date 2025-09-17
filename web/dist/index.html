@@ -35,7 +35,7 @@
 						</div>
 						<div class="input-group my-2 code-group align-items-end" id="format-stmt-div">
 							<div class="input-group-prepend">
-								<code class="input-group-text">10 FORMAT(</code>
+								<code class="input-group-text"><label for="format-stmt">10 FORMAT(</label></code>
 							</div>
 							<input type="text" class="form-control code-input" value='"Hello World!"' id="format-stmt"/>
 							<div class="input-group-append">
@@ -44,13 +44,13 @@
 						</div>
 						<button type="button" class="btn btn-primary w-100" id="run">Run <i class="bi bi-chevron-double-right"></i></button>
 					</div>
-					<div class="col">
+					<div class="col" aria-label="Variables">
 						<div class="container" id="variables">
 						</div>
 						<button type="button" class="btn btn-secondary w-100" id="add-variable"> <i class="bi bi-plus-lg"></i> Add variable</button>
 					</div>
 				</div>
-				<div class="row border rounded-3 bg-body-secondary my-2 py-1">
+				<div class="row border rounded-3 bg-body-secondary my-2 py-1" tabindex="1">
 					<h1>Statement</h1>
 					<code id="stmt-text">
 					10 FORMAT(A)
@@ -128,14 +128,14 @@ error: Expected ',' or ')' in format expression
 			<link rel="stylesheet" href="style.css"/>
 			<div class="row mb-1">
 				<div class="d-inline-flex">
-					<select class="form-select" id="type-select">
+					<select class="form-select" id="type-select" aria-label="Variable Type">
 						<option selected>Integer</option>
 						<option>Real</option>
 						<option>Complex</option>
 						<option>String</option>
 						<option>Logical</option>
 					</select>
-					<div id="variable-input-container"><input type="number" class="form-control" value="0" step="1"/></div>
+					<div id="variable-input-container"><input type="number" class="form-control" value="0" step="1" aria-label="Integer Value"/></div>
 					<button type="button" class="btn btn-outline-danger" id="delete"><i class="bi bi-trash"></i></button>
 				</div>
 			</div>
