@@ -186,8 +186,40 @@ function urlHandle(variables) {
 
 }
 
+function setupDarkMode() {
+	let darkMode = document.getElementById("dark-mode");
+	let darkModeIcon = document.getElementById("dark-mode-icon");
+	let scheme = "light";
+
+	function updateDarkMode() {
+		document.documentElement.setAttribute("data-bs-theme", scheme);
+		if (scheme === "dark") {
+			darkModeIcon.classList.remove("bi-moon");
+			darkModeIcon.classList.add("bi-moon-fill");
+		} else {
+			darkModeIcon.classList.remove("bi-moon-fill");
+			darkModeIcon.classList.add("bi-moon");
+		}
+	}
+
+	darkMode.addEventListener("click", () => {
+		if (scheme === "light") {
+			scheme = "dark";
+		} else {
+			scheme = "light";
+		}
+		updateDarkMode();
+	});
+
+	if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+		scheme = "dark";
+	}
+	updateDarkMode();
+}
+
 async function load() {
 	setupLicenses();
+	setupDarkMode();
 
 	let addVar = document.getElementById("add-variable");
 
