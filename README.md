@@ -6,7 +6,12 @@ Major differences between that tutorial and this one are that I'm using [LLVM 20
 # Compiling
 Feel free to skip to Part Four if you have no intention of changing the binary `.wasm` code.
 
-## Part One: Build libFortranRuntime for WebAssembly
+## Part One: Setup the LLVM Repo
+
+1. Clone [LLVM](https://github.com/llvm/llvm-project) on Github.
+2. Apply the Git patch under `llvm/llvm-wasm.diff`.
+
+## Part Two: Build libFortranRuntime for WebAssembly
 
 The `FORMAT` statement is actually a bunch of disguised calls to `libFortranRuntime`, so we need to compile these calls to WebAssembly:
 
@@ -17,7 +22,7 @@ The `FORMAT` statement is actually a bunch of disguised calls to `libFortranRunt
 	- Then make with `emcmake cmake --build <DIRECTORY>` for each.
 3. Copy the built libraries to the `binaries/libFortran` folder of the git project.
 
-## Part Two: Building the Program
+## Part Three: Building the Program
 
 ```bash
 emcmake cmake -B build
@@ -28,7 +33,7 @@ cmake --build build --target=fortran_wasm
 #### Missing variable is: CMAKE_Fortran_PREPROCESS_SOURCE
 I believe this is something specific to Ninja, so you can just re-run `emcmake cmake -B build` and it should be fixed.
 
-## Part Three: Running the Web Demo
+## Part Four: Running the Web Demo
 ```bash
 npm -C web ci
 npm -C web run start --mode development
