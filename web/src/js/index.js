@@ -92,8 +92,11 @@ function setupLicenses() {
 		div.id = license;
 		div.setAttribute("aria-labelledby", `${license}-tab`);
 
+		let pre = document.createElement("pre");
+		div.appendChild(pre);
+
 		text.then((t) => {
-			div.innerText = t;
+			pre.innerText = t;
 		});
 
 		licenseNav.appendChild(listItem);
