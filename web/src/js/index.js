@@ -189,7 +189,7 @@ function urlHandle(variables) {
 function setupDarkMode() {
 	let darkMode = document.getElementById("dark-mode");
 	let darkModeIcon = document.getElementById("dark-mode-icon");
-	let scheme = "light";
+	let scheme = localStorage.getItem("mode");
 
 	function updateDarkMode() {
 		document.documentElement.setAttribute("data-bs-theme", scheme);
@@ -208,12 +208,15 @@ function setupDarkMode() {
 		} else {
 			scheme = "light";
 		}
+		localStorage.setItem("mode", scheme);
 		updateDarkMode();
 	});
 
-	if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+	scheme = scheme ?? "light";
+	if (localStorage.getItem("mode") === null && window.matchMedia('(prefers-color-scheme: dark)').matches) {
 		scheme = "dark";
 	}
+
 	updateDarkMode();
 }
 
